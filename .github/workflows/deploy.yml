@@ -7,8 +7,8 @@ on:
     branches: [ main ]
 
 env:
-  AWS_REGION: us-east-1
-  STACK_NAME: hello-world-stack
+  AWS_REGION: eu-west-2
+  STACK_NAME: comic-catcher
 
 jobs:
   deploy:
