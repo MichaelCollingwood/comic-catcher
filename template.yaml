@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
-  HelloWorldFunction:
+  Function:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./src/
@@ -15,25 +15,25 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
 
-  HelloWorldScheduleRule:
+  ScheduleRule:
     Type: AWS::Events::Rule
     Properties:
       Description: "Trigger Lambda every 5 minutes"
       ScheduleExpression: "rate(5 minutes)"
       State: ENABLED
       Targets:
-        - Arn: !GetAtt HelloWorldFunction.Arn
-          Id: "HelloWorldFunctionTarget"
+        - Arn: !GetAtt Function.Arn
+          Id: "FunctionTarget"
 
   PermissionForEventsToInvokeLambda:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !Ref HelloWorldFunction
+      FunctionName: !Ref Function
       Action: "lambda:InvokeFunction"
       Principal: "events.amazonaws.com"
-      SourceArn: !GetAtt HelloWorldScheduleRule.Arn
+      SourceArn: !GetAtt ScheduleRule.Arn
 
 Outputs:
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn 
+  Function:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt Function.Arn 

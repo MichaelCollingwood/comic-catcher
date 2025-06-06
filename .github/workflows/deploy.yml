@@ -33,18 +33,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Package SAM template
-        run: |
-          aws cloudformation package \
-            --template-file template.yaml \
-            --s3-bucket ${{ secrets.DEPLOYMENT_BUCKET }} \
-            --output-template-file packaged.yaml
-
-      - name: Deploy SAM template
+      - name: Deploy CloudFormation template
         if: github.ref == 'refs/heads/main'
         run: |
           aws cloudformation deploy \
-            --template-file packaged.yaml \
+            --template-file template.yaml \
             --stack-name ${{ env.STACK_NAME }} \
             --capabilities CAPABILITY_IAM \
             --no-fail-on-empty-changeset 
