@@ -1,19 +1,41 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  CodeBucket:
+    Type: String
+    Description: S3 bucket containing the Lambda function code
+  CodeKey:
+    Type: String
+    Description: S3 key of the Lambda function code
+
 Resources:
-  Function:
-    Type: AWS::Serverless::Function
+  FunctionRole:
+    Type: AWS::IAM::Role
     Properties:
-      CodeUri: ./src/
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  Function:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: !Ref CodeBucket
+        S3Key: !Ref CodeKey
       Handler: app.lambda_handler
+      Role: !GetAtt FunctionRole.Arn
       Runtime: python3.9
       Architectures:
         - x86_64
       Timeout: 30
       MemorySize: 128
-      Policies:
-        - AWSLambdaBasicExecutionRole
 
   ScheduleRule:
     Type: AWS::Events::Rule
