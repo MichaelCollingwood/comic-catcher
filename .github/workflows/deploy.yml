@@ -54,4 +54,5 @@ jobs:
             --no-fail-on-empty-changeset \
             --parameter-overrides \
               CodeBucket=${{ secrets.DEPLOYMENT_BUCKET }} \
-              CodeKey=function.zip 
+              CodeKey=function.zip \
+              PhoneNumber=${{ secrets.PHONE_NUMBER }} 
