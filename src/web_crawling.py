@@ -132,4 +132,3 @@ def extract_relevant_events_from_bill_murray_homepage(comedians: List[str]) -> L
         return extract_relevant_comedians_from_events(comedians, events_and_urls)
     else:
         return []
-
